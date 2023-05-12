@@ -12,18 +12,19 @@ def get_path(wildcards):
 
 rule all:
 	input:
-			expand("/storage/scratch01/groups/bu/myeloma_altum/agostoli/nanoplot/output/{sample}",zip, sample=samples['sample'])
+			expand("/storage/scratch01/groups/bu/myeloma_altum/agostoli/board_alegosto01/nanoplot/output/{sample}",zip, sample=samples['sample'])
 rule guppy:
 	input:
 			get_path
 	output: 
-			"/storage/scratch01/groups/bu/myeloma_altum/agostoli/guppy/output/{sample}/sequencing_summary.txt"
+			directory("/storage/scratch01/groups/bu/myeloma_altum/agostoli/board_alegosto01/guppy/output/{sample}")
 	shell:
 			"/storage/scratch01/groups/bu/myeloma_altum/agostoli/ont-guppy/bin/guppy_basecaller --model_file template_r9.4.1_450bps_hac.jsn --save_path {output} --input_path {input} --device cuda:all:100% --disable_pings -c dna_r9.4.1_450bps_fast.cfg --min_qscore 7 --recursive -x 'cuda:all' --num_callers 4 --gpu_runners_per_device 4 --chunks_per_runner 1024 --chunk_size 1000 --compress_fastq"
+	
 rule nanoplot:
 	input: 
-			"/storage/scratch01/groups/bu/myeloma_altum/agostoli/guppy/output/{sample}/sequencing_summary.txt" 
+			"/storage/scratch01/groups/bu/myeloma_altum/agostoli/board_alegosto01/guppy/output/{sample}"
 	output:
-			directory("/storage/scratch01/groups/bu/myeloma_altum/agostoli/nanoplot/output/{sample}")
+			directory("/storage/scratch01/groups/bu/myeloma_altum/agostoli/board_alegosto01/nanoplot/output/{sample}")
 	shell: 
-			"NanoPlot --summary {input} --loglength -o {output}"
+			"NanoPlot --summary {input}/sequencing_summary.txt --loglength -o {output}"
