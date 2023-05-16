@@ -1,0 +1,35 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job         count    min threads    max threads
+--------  -------  -------------  -------------
+all             1              1              1
+guppy           2              1              1
+nanoplot        2              1              1
+total           5              1              1
+
+Select jobs to execute...
+
+[Fri May 12 13:49:41 2023]
+rule guppy:
+    input: /storage/scratch01/groups/bu/myeloma_altum/altum/Sequencing_runs/1901449_nanopore_20220523/no_sample/20220523_1017_MN38629_FAR64621_15a8c2b1/fast5
+    output: /storage/scratch01/groups/bu/myeloma_altum/agostoli/guppy/output/sample2/sequencing_summary.txt
+    jobid: 4
+    reason: Missing output files: /storage/scratch01/groups/bu/myeloma_altum/agostoli/guppy/output/sample2/sequencing_summary.txt
+    wildcards: sample=sample2
+    resources: tmpdir=/tmp
+
+[Fri May 12 13:49:41 2023]
+Error in rule guppy:
+    jobid: 4
+    input: /storage/scratch01/groups/bu/myeloma_altum/altum/Sequencing_runs/1901449_nanopore_20220523/no_sample/20220523_1017_MN38629_FAR64621_15a8c2b1/fast5
+    output: /storage/scratch01/groups/bu/myeloma_altum/agostoli/guppy/output/sample2/sequencing_summary.txt
+    shell:
+        /storage/scratch01/groups/bu/myeloma_altum/agostoli/ont-guppy/bin/guppy_basecaller --model_file template_r9.4.1_450bps_hac.jsn --save_path /storage/scratch01/groups/bu/myeloma_altum/agostoli/guppy/output/sample2/sequencing_summary.txt --input_path /storage/scratch01/groups/bu/myeloma_altum/altum/Sequencing_runs/1901449_nanopore_20220523/no_sample/20220523_1017_MN38629_FAR64621_15a8c2b1/fast5 --device cuda:all:100% --disable_pings -c dna_r9.4.1_450bps_fast.cfg --min_qscore 7 --recursive -x 'cuda:all' --num_callers 4 --gpu_runners_per_device 4 --chunks_per_runner 1024 --chunk_size 1000 --compress_fastq
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-05-12T134938.897559.snakemake.log

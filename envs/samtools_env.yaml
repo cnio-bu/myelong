@@ -1,0 +1,6 @@
+name: samtools_env.yaml
+cahnnels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - samtools 

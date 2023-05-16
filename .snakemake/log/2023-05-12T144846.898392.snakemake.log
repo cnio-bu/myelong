@@ -1,0 +1,35 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job         count    min threads    max threads
+--------  -------  -------------  -------------
+all             1              1              1
+guppy           1              1              1
+nanoplot        1              1              1
+total           3              1              1
+
+Select jobs to execute...
+
+[Fri May 12 14:48:47 2023]
+rule guppy:
+    input: /storage/scratch01/groups/bu/myeloma_altum/agostoli/board_alegosto01/sample_data
+    output: /storage/scratch01/groups/bu/myeloma_altum/agostoli/guppy/output/sample1/sequencing_summary.txt
+    jobid: 2
+    reason: Missing output files: /storage/scratch01/groups/bu/myeloma_altum/agostoli/guppy/output/sample1/sequencing_summary.txt
+    wildcards: sample=sample1
+    resources: tmpdir=/tmp
+
+ImproperOutputException in rule guppy in file /storage/scratch01/groups/bu/myeloma_altum/agostoli/board_alegosto01/myelong/Snakefile, line 16:
+Outputs of incorrect type (directories when expecting files or vice versa). Output directories must be flagged with directory(). for rule guppy:
+    output: /storage/scratch01/groups/bu/myeloma_altum/agostoli/guppy/output/sample1/sequencing_summary.txt
+    wildcards: sample=sample1
+    affected files:
+        /storage/scratch01/groups/bu/myeloma_altum/agostoli/guppy/output/sample1/sequencing_summary.txt
+Removing output files of failed job guppy since they might be corrupted:
+/storage/scratch01/groups/bu/myeloma_altum/agostoli/guppy/output/sample1/sequencing_summary.txt
+Skipped removing non-empty directory /storage/scratch01/groups/bu/myeloma_altum/agostoli/guppy/output/sample1/sequencing_summary.txt
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-05-12T144846.898392.snakemake.log
