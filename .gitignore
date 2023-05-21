@@ -1,0 +1,4 @@
+/results
+.snakemake
+error.txt
+log.txt
