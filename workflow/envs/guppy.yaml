@@ -1,0 +1,6 @@
+name: guppy.yaml
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - guppy 
