@@ -1,4 +1,6 @@
+/results_completed
 /results
+/resources
 .snakemake
 error.txt
 log.txt
