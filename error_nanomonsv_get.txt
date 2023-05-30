@@ -1,0 +1,11 @@
+05/24/2023 17:39:51 - nanomonsv.run - INFO - Clustering rearrangement type supporting reads for putative SVs
+05/24/2023 17:39:53 - nanomonsv.run - INFO - Clustering insertion type supporting reads for putative SVs
+05/24/2023 17:40:03 - nanomonsv.run - INFO - Clustering deletion type supporting reads for putative SVs
+05/24/2023 17:40:10 - nanomonsv.run - INFO - Gathering sequences of supporting reads
+05/24/2023 17:43:26 - nanomonsv.run - INFO - Preparation for parallel execution
+05/24/2023 17:43:27 - nanomonsv.run - INFO - Generate consensus sequences (0)
+05/24/2023 18:14:15 - nanomonsv.run - INFO - Locating single-base resolution break points for candidate SVs (0)
+05/24/2023 20:36:25 - nanomonsv.run - INFO - Counting the number of supporting read for the tumor by realignment of SV candidate segments (0)
+05/24/2023 23:31:44 - nanomonsv.run - INFO - End Process (0): ret_code=0
+05/24/2023 23:31:44 - nanomonsv.run - INFO - Merge parallel execution
+05/24/2023 23:31:46 - nanomonsv.run - INFO - Final processing

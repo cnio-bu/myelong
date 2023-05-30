@@ -1,0 +1,6 @@
+name: nanomonsv.yaml
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - nanomonvs=0.5.1
