@@ -159,36 +159,4 @@ rule cutesv:
 	shell:
         	"cuteSV {input.bam} {input.gen} {output} results/"
 
-# rule nanomonsv_parse:
-# 	input:
-# 			bam="results/sorted/{sample}.sorted.bam",
-# 			sniffles="results/sniffles/{sample}.vcf"
-# 	output:
-# 			directory("results/nanomonsv_parse/{sample}")
-# 	conda:
-# 			"envs/nanomonsv.yaml"
-# 	benchmark: "benchmarks/{sample}.tsv"
-# 	threads: 
-# 			8
-# 	resources: 
-# 			mem_mb= 32000,
-# 			runtime= 1440   
-# 	shell:
-# 			"nanomonsv parse {input.bam} {sample}"
-
-# rule nanomonsv_get:
-# 	input:
-# 			"results/nanomonsv_parse/{sample}"
-# 	output:
-# 			"results/nanomonsv_get/{sample}.vcf"
-# 	conda:
-# 			"envs/nanomonsv.yaml"
-# 	benchmark: "benchmarks/{sample}.tsv"
-# 	threads: 
-# 			8
-# 	resources: 
-# 			mem_mb= 32000,
-# 			runtime= 1440   
-# 	shell:
-# 			"nanomonsv parse {input.bam} {sample}"
 
