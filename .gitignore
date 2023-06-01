@@ -4,5 +4,3 @@
 .snakemake
 /logs
 /benchmarks
-/envs/nanomonsv.yaml
-nanomonsv rules
