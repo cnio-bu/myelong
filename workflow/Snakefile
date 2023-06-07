@@ -10,8 +10,8 @@ def get_path(wildcards):
 
 rule all:
 	input:
-			expand("results/sniffles/{sample}_sniffles.vcf",zip, sample=samples['sample']),
-			expand("results/cutesv/{sample}_cutesv.vcf",zip, sample=samples['sample'])
+			sniffles="results/sniffles/patient_sniffles.vcf",
+			cutesv="results/cutesv/patient_cutesv.vcf",			
 			
 rule guppy:
 	input:
@@ -44,12 +44,12 @@ rule nanoplot:
 	shell: 
 			"NanoPlot --summary {input}/sequencing_summary.txt --loglength -o {output}"
 
-rule concat:
+rule concat_guppy:
 	input: 
 			gup="results/guppy/{sample}",
 			nano="results/nanoplot/{sample}"
 	output:
-			"results/concat/{sample}_fastq.gz"
+			"results/concat_guppy/{sample}_fastq.gz"
 	benchmark: "benchmarks/{sample}.tsv"
 	threads: 
 			8
@@ -59,15 +59,29 @@ rule concat:
 	shell:
 			"cat {input.gup}/pass/*.fastq.gz > {output}"
 			
+
+rule concat_samples:
+	input:
+			expand("results/concat_guppy/{sample}_fastq.gz",zip, sample=samples['sample'])
+
+	output:
+			fastq="results/concat_samples/patient_fastq.gz"
+	benchmark: "benchmarks/patient.tsv"
+	threads: 
+			8
+	resources: 
+			mem_mb= 32000,
+			runtime= 1440     
+	shell:
+			"cat results/concat_guppy/*fastq.gz > {output}"
+
 rule minimap2:
 	input: 
-			fastq="results/concat/{sample}_fastq.gz",
+			fastq="results/concat_samples/patient_fastq.gz",
 			genome="resources/GRCh38.primary_assembly.genome.fa.gz"
 	output:
-			"results/minimap/{sample}.sam"
-	# params:
-	# 		extra="t"
-	benchmark: "benchmarks/{sample}.tsv"
+			"results/minimap/patient.sam"
+	benchmark: "benchmarks/patient.tsv"
 	threads: 
 			8
 	resources: 
@@ -80,10 +94,10 @@ rule minimap2:
 
 rule samtools_conversion_to_bam:
 	input:
-			"results/minimap/{sample}.sam"
+			"results/minimap/patient.sam"
 	output:
-			"results/samtools/{sample}.bam"
-	benchmark: "benchmarks/{sample}.tsv"
+			"results/samtools/patient.bam"
+	benchmark: "benchmarks/patient.tsv"
 	threads: 
 			8
 	resources: 
@@ -96,10 +110,10 @@ rule samtools_conversion_to_bam:
 
 rule samtools_sort:
     input:
-        	"results/samtools/{sample}.bam"
+        	"results/samtools/patient.bam"
     output:
-        	"results/sorted/{sample}.sorted.bam"
-    benchmark: "benchmarks/{sample}.tsv"
+        	"results/sorted/patient.sorted.bam"
+    benchmark: "benchmarks/patient.tsv"
 	threads: 
 			8
 	resources: 
@@ -112,10 +126,10 @@ rule samtools_sort:
 
 rule samtools_index:
     input:
-        	"results/sorted/{sample}.sorted.bam"
+        	"results/sorted/patient.sorted.bam"
     output:
-        	"results/sorted/{sample}.sorted.bam.bai"
-    benchmark: "benchmarks/{sample}.tsv"
+        	"results/sorted/patient.sorted.bam.bai"
+    benchmark: "benchmarks/patient.tsv"
 	threads: 
 			8
 	resources: 
@@ -127,13 +141,13 @@ rule samtools_index:
         	"samtools index {input} -o {output}"
 rule sniffles:
 	input:
-			bam="results/sorted/{sample}.sorted.bam",
-			bai="results/sorted/{sample}.sorted.bam.bai"
+			bam="results/sorted/patient.sorted.bam",
+			bai="results/sorted/patient.sorted.bam.bai"
 	output:
-			"results/sniffles/{sample}_sniffles.vcf"
+			"results/sniffles/patient_sniffles.vcf"
 	conda:
 			"envs/sniffles.yaml"
-	benchmark: "benchmarks/{sample}.tsv"
+	benchmark: "benchmarks/patient.tsv"
 	threads: 
 			8
 	resources: 
@@ -144,13 +158,13 @@ rule sniffles:
 
 rule cutesv:
 	input:
-			bam="results/sorted/{sample}.sorted.bam",
+			bam="results/sorted/patient.sorted.bam",
 			gen="resources/GRCh38.primary_assembly.genome.fa",
 	output:
-			"results/cutesv/{sample}_cutesv.vcf"
+			"results/cutesv/patient_cutesv.vcf"
 	conda:
 			"envs/cutesv.yaml"
-	benchmark: "benchmarks/{sample}.tsv"
+	benchmark: "benchmarks/patient.tsv"
 	threads: 
 			8
 	resources: 

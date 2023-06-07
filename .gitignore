@@ -1,5 +1,6 @@
 /results_completed
-/results
+/results_concatenated_samples
+/results_separate_samples
 /resources
 .snakemake
 /logs
