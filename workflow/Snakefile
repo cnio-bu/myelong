@@ -11,7 +11,8 @@ def get_path(wildcards):
 rule all:
 	input:
 			sniffles="results/sniffles/patient_sniffles.vcf",
-			cutesv="results/cutesv/patient_cutesv.vcf",			
+			cutesv="results/cutesv/patient_cutesv.vcf",		
+			bcftools="results/bcftools/analysis.tsv"	
 			
 rule guppy:
 	input:
@@ -19,21 +20,21 @@ rule guppy:
 	output: 
 			directory("results/guppy/{sample}")
 	benchmark: 
-			"benchmarks/{sample}.tsv"
+			"benchmarks/{sample}_guppy.tsv"
 	threads:
 			8
 	resources: 
 			mem_mb= 32000,
 			runtime= 1440   
 	shell:
-			"resources/ont-guppy/bin/guppy_basecaller --model_file template_r9.4.1_450bps_hac.jsn --save_path {output} --input_path {input} --device cuda:all:100% --disable_pings -c dna_r9.4.1_450bps_fast.cfg --min_qscore 7 --recursive -x 'cuda:all' --num_callers 4 --gpu_runners_per_device 4 --chunks_per_runner 1024 --chunk_size 1000 --compress_fastq"
+			"resources/ont-guppy/bin/guppy_basecaller --model_file template_r9.4.1_450bps_hac.jsn --save_path {output} --input_path {input} --disable_pings -c dna_r9.4.1_450bps_fast.cfg --min_qscore 7 --recursive -x 'cuda:all' --num_callers 4 --gpu_runners_per_device 4 --chunks_per_runner 1024 --chunk_size 1000 --compress_fastq"
 
 rule nanoplot:
 	input: 
 			"results/guppy/{sample}"
 	output:
 			directory("results/nanoplot/{sample}")
-	benchmark: "benchmarks/{sample}.tsv"
+	benchmark: "benchmarks/{sample}_nanoplot.tsv"
 	threads: 
 			8
 	resources: 
@@ -50,7 +51,7 @@ rule concat_guppy:
 			nano="results/nanoplot/{sample}"
 	output:
 			"results/concat_guppy/{sample}_fastq.gz"
-	benchmark: "benchmarks/{sample}.tsv"
+	benchmark: "benchmarks/{sample}_concat_guppy.tsv"
 	threads: 
 			8
 	resources: 
@@ -66,7 +67,7 @@ rule concat_samples:
 
 	output:
 			fastq="results/concat_samples/patient_fastq.gz"
-	benchmark: "benchmarks/patient.tsv"
+	benchmark: "benchmarks/concat_samples.tsv"
 	threads: 
 			8
 	resources: 
@@ -81,7 +82,7 @@ rule minimap2:
 			genome="resources/GRCh38.primary_assembly.genome.fa.gz"
 	output:
 			"results/minimap/patient.sam"
-	benchmark: "benchmarks/patient.tsv"
+	benchmark: "benchmarks/minimap2.tsv"
 	threads: 
 			8
 	resources: 
@@ -97,7 +98,7 @@ rule samtools_conversion_to_bam:
 			"results/minimap/patient.sam"
 	output:
 			"results/samtools/patient.bam"
-	benchmark: "benchmarks/patient.tsv"
+	benchmark: "benchmarks/samtools_conversion.tsv"
 	threads: 
 			8
 	resources: 
@@ -113,7 +114,7 @@ rule samtools_sort:
         	"results/samtools/patient.bam"
     output:
         	"results/sorted/patient.sorted.bam"
-    benchmark: "benchmarks/patient.tsv"
+    benchmark: "benchmarks/samtools_sort.tsv"
 	threads: 
 			8
 	resources: 
@@ -129,7 +130,7 @@ rule samtools_index:
         	"results/sorted/patient.sorted.bam"
     output:
         	"results/sorted/patient.sorted.bam.bai"
-    benchmark: "benchmarks/patient.tsv"
+    benchmark: "benchmarks/samtools_index.tsv"
 	threads: 
 			8
 	resources: 
@@ -142,19 +143,20 @@ rule samtools_index:
 rule sniffles:
 	input:
 			bam="results/sorted/patient.sorted.bam",
-			bai="results/sorted/patient.sorted.bam.bai"
+			bai="results/sorted/patient.sorted.bam.bai",
+			genome="resources/GRCh38.primary_assembly.genome.fa"
 	output:
 			"results/sniffles/patient_sniffles.vcf"
 	conda:
 			"envs/sniffles.yaml"
-	benchmark: "benchmarks/patient.tsv"
+	benchmark: "benchmarks/sniffles.tsv"
 	threads: 
 			8
 	resources: 
 			mem_mb= 32000,
 			runtime= 1440   
 	shell:
-			"sniffles --input {input.bam} --vcf {output}"
+			"sniffles --input {input.bam} --reference {input.genome} --vcf {output}"
 
 rule cutesv:
 	input:
@@ -164,7 +166,7 @@ rule cutesv:
 			"results/cutesv/patient_cutesv.vcf"
 	conda:
 			"envs/cutesv.yaml"
-	benchmark: "benchmarks/patient.tsv"
+	benchmark: "benchmarks/cutesv.tsv"
 	threads: 
 			8
 	resources: 
@@ -172,5 +174,20 @@ rule cutesv:
 			runtime= 1440   
 	shell:
         	"cuteSV {input.bam} {input.gen} {output} results/"
-
-
+rule bcftools:
+	input:
+			sniffles="results/sniffles/patient_sniffles.vcf",
+			cutesv="results/cutesv/patient_cutesv.vcf",
+			bash="resources/variants_analysis.sh"
+	output:
+			"results/bcftools/analysis.tsv"
+	conda:
+			"envs/bcftools.yaml"
+	benchmark: "benchmarks/bcftools.tsv"
+	threads: 
+			8
+	resources: 
+			mem_mb= 32000,
+			runtime= 1440   
+	shell:
+        	"bash {input.bash}"
