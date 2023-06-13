@@ -177,8 +177,7 @@ rule cutesv:
 rule bcftools:
 	input:
 			sniffles="results/sniffles/patient_sniffles.vcf",
-			cutesv="results/cutesv/patient_cutesv.vcf",
-			bash="resources/variants_analysis.sh"
+			cutesv="results/cutesv/patient_cutesv.vcf"
 	output:
 			"results/bcftools/analysis.tsv"
 	conda:
@@ -189,5 +188,5 @@ rule bcftools:
 	resources: 
 			mem_mb= 32000,
 			runtime= 1440   
-	shell:
-        	"bash {input.bash}"
+	script:
+        	"resources/variants_analysis.sh"
