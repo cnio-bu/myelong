@@ -189,4 +189,4 @@ rule bcftools:
 			mem_mb= 32000,
 			runtime= 1440   
 	script:
-        	"resources/variants_analysis.sh"
+        	"scripts/variants_analysis.sh"
