@@ -1,6 +1,4 @@
 #!/bin/bash
-sniffles_path='/storage/scratch01/groups/bu/myeloma_altum/agostoli/board_alegosto01/myelong/results_concatenated_samples/sniffles/patient_sniffles.vcf'
-cutesv_path='/storage/scratch01/groups/bu/myeloma_altum/agostoli/board_alegosto01/myelong/results_concatenated_samples/cutesv/patient_cutesv.vcf'
 
 printf "INFO \t SNIFFLES \t CUTE\n" > "${snakemake_output[0]}"
 
