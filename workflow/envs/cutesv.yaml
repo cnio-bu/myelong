@@ -1,0 +1,6 @@
+name: cutesv.yaml
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - cutesv=2.0.2

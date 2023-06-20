@@ -1,6 +1,6 @@
-name: guppy.yaml
+name: cutesv.yaml
 channels:
   - conda-forge
   - bioconda
 dependencies:
-  - guppy 
+  - bcftools=1.17

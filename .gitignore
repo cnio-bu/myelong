@@ -1,6 +1,8 @@
-/results_completed
 /results
+/results_concatenated_samples
+/results_separate_samples
 /resources
+/combined_output
 .snakemake
-error.txt
-log.txt
+/logs
+/benchmarks
